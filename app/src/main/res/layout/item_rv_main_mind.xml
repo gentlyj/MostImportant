@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@android:color/black"
+    app:cardCornerRadius="3dp"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp"
+    android:layout_height="48dp"><!-- android:orientation="vertical"-->
+
+        <android.support.v7.widget.CardView
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+
+        app:cardCornerRadius="3dp"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:layout_height="48dp"><!--app:cardBackgroundColor="@android:color/white"-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+            android:text="买房子的必要条件"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:id="@+id/item_tv_main_mind_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+</FrameLayout>
