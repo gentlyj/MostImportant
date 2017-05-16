@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MindRvAdpter.ItemOnClickListener {
     @BindView(R.id.main_toolbar)
     protected Toolbar mToolbar;
     @BindView(R.id.main_add_button)
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
         mData = mDbDao.getAllData();
         mMindRvAdpter = new MindRvAdpter(this.getApplicationContext(), mData);
+        mMindRvAdpter.setItemOnClickListener(this);
         mMindRv.setAdapter(mMindRvAdpter);
     }
 
@@ -136,5 +136,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void showToast(String content) {
         Toast.makeText(this.getApplicationContext(), content, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemClick(View itemView, int position) {
+        if (position<0){
+            return;
+        }
+        showToast(mData.get(position)+" 被点击了");
     }
 }

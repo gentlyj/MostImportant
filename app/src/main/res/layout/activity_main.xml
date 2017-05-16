@@ -5,15 +5,22 @@
     android:layout_height="match_parent"
     tools:context="com.ifading.mostimport.activity.MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:id="@+id/main_toolbar"
         android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:elevation="3dp"
-        ><!--android:background="#88000000"
-        android:elevation="8dp"-->
-        </android.support.v7.widget.Toolbar>
+        >&lt;!&ndash;android:background="#88000000"
+        android:elevation="8dp"&ndash;&gt;
+        </android.support.v7.widget.Toolbar>-->
+
+    <include
+        android:id="@+id/main_toolbar"
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="top" />
 
 
 
