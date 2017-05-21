@@ -1,4 +1,4 @@
-package com.ifading.mostimport;
+package com.ifading.mostimportant;
 
 import org.junit.Test;
 

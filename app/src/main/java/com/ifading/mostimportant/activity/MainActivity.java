@@ -1,8 +1,9 @@
-package com.ifading.mostimport.activity;
+package com.ifading.mostimportant.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ifading.mostimport.R;
-import com.ifading.mostimport.adpter.MindRvAdpter;
-import com.ifading.mostimport.db.DbDao;
-import com.ifading.mostimport.helper.DragCallback;
+import com.ifading.mostimportant.R;
+import com.ifading.mostimportant.adpter.MindRvAdpter;
+import com.ifading.mostimportant.db.DbDao;
+import com.ifading.mostimportant.helper.DragCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements MindRvAdpter.Item
         if (position<0){
             return;
         }
-        showToast(mData.get(position)+" 被点击了");
+        Intent intent = new Intent(MainActivity.this,MostImportantDetailActivity.class);
+        intent.putExtra(MostImportantDetailActivity.ITEM_NUMBER,position);
+        intent.putExtra(MostImportantDetailActivity.ITEN_NAME,mData.get(position));
+        startActivity(intent);
     }
 }

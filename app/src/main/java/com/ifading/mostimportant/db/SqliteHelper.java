@@ -1,4 +1,4 @@
-package com.ifading.mostimport.db;
+package com.ifading.mostimportant.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

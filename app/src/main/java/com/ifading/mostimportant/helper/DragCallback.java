@@ -1,12 +1,10 @@
-package com.ifading.mostimport.helper;
+package com.ifading.mostimportant.helper;
 
 import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-
-import java.util.Collections;
 
 /**
  * 滑动拖动时的回调类 Created by Administrator on 2017/5/11.

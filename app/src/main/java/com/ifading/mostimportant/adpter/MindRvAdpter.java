@@ -1,4 +1,4 @@
-package com.ifading.mostimport.adpter;
+package com.ifading.mostimportant.adpter;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ifading.mostimport.R;
+import com.ifading.mostimportant.R;
 
 import java.util.ArrayList;
 

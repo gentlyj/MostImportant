@@ -1,4 +1,4 @@
-package com.ifading.mostimport;
+package com.ifading.mostimportant;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
