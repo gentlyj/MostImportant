@@ -16,44 +16,30 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/4/10.
  */
 
-public class MindRvAdpter extends RecyclerView.Adapter {
+public class DetailListRvAdpter extends RecyclerView.Adapter {
 
-    private static final String TAG = "MindRvAdpter";
+    private static final String TAG = "DetailListRvAdpter";
     private Context mContext;
     private ArrayList<String> mDatas;
     private ItemOnClickListener mItemOnClickListener;
 
-    public MindRvAdpter(Context context, ArrayList<String> data) {
+    public DetailListRvAdpter(Context context, ArrayList<String> data) {
         this.mDatas = data;
         this.mContext = context;
-        Log.d(TAG, "新建MindRvAdpter了" );
+        Log.d(TAG, "新建DetailListRvAdpter,数据大小:"+data.size() );
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "设置内容了,onCreateViewHolder:");
+        Log.d(TAG, "设置内容了,onCreateViewHolder调用了");
         return new MainViewHolder(View.inflate(mContext, R.layout.item_rv_main_mind, null));
     }
 
     @Override
     public void onBindViewHolder( RecyclerView.ViewHolder holder, final int position) {
         Log.d(TAG, "设置内容了,position:" + position);
-
         ((MainViewHolder) holder).mTvName.setText(mDatas.get(position));
-        //判断是否设置了监听器
-        /*if(mItemOnClickListener != null){
-            //为ItemView设置监听器
-            ((MainViewHolder)holder).mCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "1111HOLDER点击了,position:" + position);
-                    if (mItemOnClickListener != null) {
-                        mItemOnClickListener.onItemClick(null, position);
-                    }
-                }
-            });
-        }*/
     }
 
     public void setData(ArrayList<String> data) {
@@ -82,6 +68,7 @@ public class MindRvAdpter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount,size:" + mDatas.size());
         return mDatas.size();
     }
 
