@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements MindRvAdpter.Item
     protected void onClick(View v) {
         if (v == mAddButton) {
             showNewItemDialog();
+
         }
     }
 
