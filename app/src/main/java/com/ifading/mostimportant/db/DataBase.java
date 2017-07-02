@@ -16,7 +16,7 @@ public interface DataBase {
         String CONTENT = "content";
 
         String CREATE_SQL = "create table "+ TABLE_NAME +"( "
-                            + ITEM_ID +"id integer primary key autoincrement, "
+                            + ITEM_ID +" integer primary key autoincrement, "
                             + ITEM_NAME + " text ,"
                             + ITEM_DESCRIBE + " text ,"
                             + CONTENT + " text )";

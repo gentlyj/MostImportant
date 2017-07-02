@@ -5,12 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-<<<<<<< HEAD
 import com.ifading.mostimportant.bean.MindItemBean;
-
-=======
->>>>>>> d2c98b0bd7667ba98a6e17881aa4a8bb180facb3
 import java.util.ArrayList;
 
 
@@ -23,18 +18,7 @@ public class DbDao {
     private static final String TAG = "DbDao";
     private final SqliteHelper mHelper;
 
-<<<<<<< HEAD
-    public DbDao(Context context) {
-        mHelper = new SqliteHelper(context, DataBase.DATABASE_NAME, null, DataBase.dbVersion);
-    }
 
-    public void insertItem(String name) {
-        SQLiteDatabase database = mHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DataBase.MAINPAGE.ITEM_NAME, name);
-
-        database.insert(DataBase.MAINPAGE.TABLE_NAME, null, contentValues);
-=======
     public DbDao(Context context){
         mHelper = new SqliteHelper(context, DataBase.DATABASE_NAME,null,DataBase.dbVersion);
     }
@@ -43,34 +27,14 @@ public class DbDao {
         SQLiteDatabase database = mHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DataBase.MAINPAGE.ITEM_NAME,name);
-
         database.insert(DataBase.MAINPAGE.TABLE_NAME,null,contentValues);
->>>>>>> d2c98b0bd7667ba98a6e17881aa4a8bb180facb3
 
         database.close();
     }
 
     /**
      * 获取所有item
-<<<<<<< HEAD
-     *
-     * @return 数据
-     */
-    public ArrayList<MindItemBean> getAllData() {
-        ArrayList<MindItemBean> data = new ArrayList<>();
-        String sql = "select * from " + DataBase.MAINPAGE.TABLE_NAME;
-        SQLiteDatabase database = mHelper.getReadableDatabase();
-        Cursor cursor = database.rawQuery(sql, new String[]{});
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                MindItemBean bean = new MindItemBean();
-                Log.d(TAG, "检索到数据:" + cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
-                bean.setName(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
-                bean.setDescribe(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_DESCRIBE)));
-                bean.setId(cursor.getInt(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_ID)));
-                bean.setContent(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.CONTENT)));
-                data.add(bean);
-=======
+
      * @return 数据
      */
     public ArrayList<String> getAllData() {
@@ -82,7 +46,7 @@ public class DbDao {
             while (cursor.moveToNext()){
                 Log.d(TAG,"检索到数据:"+cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
                 data.add(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
->>>>>>> d2c98b0bd7667ba98a6e17881aa4a8bb180facb3
+
             }
             cursor.close();
         }
@@ -90,7 +54,6 @@ public class DbDao {
 
         return data;
     }
-<<<<<<< HEAD
 
     /**
      * 更新某一思考的内部条目的改变
@@ -130,6 +93,4 @@ public class DbDao {
         database.close();
         return content;
     }
-=======
->>>>>>> d2c98b0bd7667ba98a6e17881aa4a8bb180facb3
 }
