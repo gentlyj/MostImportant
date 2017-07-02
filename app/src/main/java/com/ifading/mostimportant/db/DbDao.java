@@ -37,21 +37,24 @@ public class DbDao {
 
      * @return 数据
      */
-    public ArrayList<String> getAllData() {
-        ArrayList<String> data = new ArrayList<>();
-        String sql = "select * from "+ DataBase.MAINPAGE.TABLE_NAME ;
+    public ArrayList<MindItemBean> getAllData() {
+        ArrayList<MindItemBean> data = new ArrayList<>();
+        String sql = "select * from " + DataBase.MAINPAGE.TABLE_NAME;
         SQLiteDatabase database = mHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql, new String[]{});
-        if (cursor!=null){
-            while (cursor.moveToNext()){
-                Log.d(TAG,"检索到数据:"+cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
-                data.add(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
-
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                MindItemBean bean = new MindItemBean();
+                Log.d(TAG, "检索到数据:" + cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
+                bean.setName(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_NAME)));
+                bean.setDescribe(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_DESCRIBE)));
+                bean.setId(cursor.getInt(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_ID)));
+                bean.setContent(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.CONTENT)));
+                data.add(bean);
+                cursor.close();
             }
-            cursor.close();
+            database.close();
         }
-        database.close();
-
         return data;
     }
 
