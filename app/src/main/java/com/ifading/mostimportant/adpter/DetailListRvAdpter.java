@@ -38,7 +38,6 @@ public class DetailListRvAdpter extends RecyclerView.Adapter {
             return new ItemAddViewHolder(View.inflate(mContext, R.layout.item_rv_detail_list_add, null));
         }else {
             return new NormalViewHolder(View.inflate(mContext, R.layout.item_rv_detail_list_normal, null));
-
         }
     }
 
@@ -47,6 +46,10 @@ public class DetailListRvAdpter extends RecyclerView.Adapter {
         Log.d(TAG, "设置内容了,position:" + position);
         if (holder instanceof NormalViewHolder) {
             ((NormalViewHolder) holder).mTvName.setText(mDatas.get(position).getTitle());
+            int precent = mDatas.get(position).getPrecent();
+            if (precent>0){
+                ((NormalViewHolder) holder).mTvPercent.setText(precent+"%");
+            }
         }
     }
 
@@ -57,10 +60,12 @@ public class DetailListRvAdpter extends RecyclerView.Adapter {
 
     public class NormalViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvName;
+        public TextView mTvPercent;
         private CardView mCard;
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTvName = (TextView) itemView.findViewById(R.id.item_tv_detail_list_title);
+            mTvPercent = (TextView) itemView.findViewById(R.id.item_tv_percent);
             mCard = (CardView) itemView.findViewById(R.id.item_card_view);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

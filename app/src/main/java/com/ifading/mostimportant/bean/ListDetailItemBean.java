@@ -7,6 +7,17 @@ package com.ifading.mostimportant.bean;
 public class ListDetailItemBean {
     private String title;
 
+    public byte getPrecent() {
+        return precent;
+    }
+
+    public void setPrecent(byte precent) {
+        this.precent = precent;
+    }
+
+    //条目所占的百分比
+    private byte precent;
+
     public String getTitle() {
         return title;
     }
@@ -29,6 +40,7 @@ public class ListDetailItemBean {
     public String toString() {
         return "ListDetailItemBean{" +
                 "title='" + title + '\'' +
+                "precent='" + precent + '\'' +
                 ", addItemType=" + addItemType +
                 '}';
     }

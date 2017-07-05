@@ -2,7 +2,6 @@ package com.ifading.mostimportant.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,20 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.ifading.mostimportant.R;
 import com.ifading.mostimportant.adpter.DetailListRvAdpter;
 import com.ifading.mostimportant.bean.ListDetailItemBean;
-import com.ifading.mostimportant.db.DataBase;
-import com.ifading.mostimportant.db.DbDao;
 import com.ifading.mostimportant.db.DbUtils;
 import com.ifading.mostimportant.utils.JsonUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -39,6 +36,10 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
     private DetailListRvAdpter mListRvAdpter;
     private ArrayList<ListDetailItemBean> mData = new ArrayList<>();
     private int mCurrentItemDbPosition;
+    //新建条目时,seekbar百分比是否调整过
+    private boolean mSeekBarSettled;
+    //seekbar百分比
+    private int mSbProgress;
 
 
     public static ListFragment newInstance(int index) {
@@ -113,7 +114,74 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
      * 新建思考的item的dialog
      */
     private void showNewItemDialog() {
-        final EditText et = new EditText(getActivity());
+        mSeekBarSettled = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        View dilogView = View.inflate(this.getActivity(), R.layout.dialog_new_item, null);
+        builder.setView(dilogView);
+        final EditText et = (EditText) dilogView.findViewById(R.id.dialog_new_item_ed_name);
+        SeekBar sb = (SeekBar) dilogView.findViewById(R.id.dialog_new_item_sb_precent);
+        Button btnOk = (Button) dilogView.findViewById(R.id.dialog_new_item_btn_ok);
+        Button btnCancel = (Button) dilogView.findViewById(R.id.dialog_new_item_btn_cancel);
+        final AlertDialog dialog = builder.show();
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mSeekBarSettled = true;
+                mSbProgress = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = et.getText().toString();
+                if (!mSeekBarSettled){
+                    Toast.makeText(getActivity().getApplicationContext(), "百分比未设置" + input, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
+                if (input.equals("")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "名称不能为空！" + input, Toast.LENGTH_LONG).show();
+                } else {
+                    //inserNewItem(input);
+                    ListDetailItemBean bean = new ListDetailItemBean();
+                    bean.setAddItemType(false);
+                    bean.setTitle(input);
+                    bean.setPrecent((byte) mSbProgress);
+                    mData.add(bean);
+                    swapData();
+
+                    //ArrayList<ListDetailItemBean> desList = (ArrayList<ListDetailItemBean>) mData.clone();
+                    ListDetailItemBean lastItem = mData.remove(mData.size()-1);
+                    //desList.remove(desList.size() - 1);
+                    String content = JsonUtils.listToJson(mData);
+                    mData.add(lastItem);
+                    Log.d(TAG, "转换后的json字符串为:" + content + " mCurrentItemDbPosition:" + mCurrentItemDbPosition);
+                    DbUtils.updateItemContent(mCurrentItemDbPosition, content);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+       /*final EditText et = new EditText(getActivity());
 
         new AlertDialog.Builder(this.getActivity(), AlertDialog.THEME_HOLO_LIGHT)
                 .setTitle("新思考的名称")
@@ -145,7 +213,7 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
                     }
                 })
                 .setNegativeButton("取消", null)
-                .show();
+                .show();*/
     }
 
     /**
