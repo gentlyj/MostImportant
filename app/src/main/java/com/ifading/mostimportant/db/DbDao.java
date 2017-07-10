@@ -51,10 +51,11 @@ public class DbDao {
                 bean.setId(cursor.getInt(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_ID)));
                 bean.setContent(cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.CONTENT)));
                 data.add(bean);
-                cursor.close();
             }
-            database.close();
+            cursor.close();
+
         }
+        database.close();
         return data;
     }
 

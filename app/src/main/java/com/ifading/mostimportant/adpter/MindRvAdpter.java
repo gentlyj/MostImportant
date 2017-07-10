@@ -1,6 +1,7 @@
 package com.ifading.mostimportant.adpter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,21 +41,8 @@ public class MindRvAdpter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder( RecyclerView.ViewHolder holder, final int position) {
         Log.d(TAG, "设置内容了,position:" + position);
-
         ((MainViewHolder) holder).mTvName.setText(mDatas.get(position).getName());
-        //判断是否设置了监听器
-        /*if(mItemOnClickListener != null){
-            //为ItemView设置监听器
-            ((NormalViewHolder)holder).mCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "1111HOLDER点击了,position:" + position);
-                    if (mItemOnClickListener != null) {
-                        mItemOnClickListener.onNormalItemClick(null, position);
-                    }
-                }
-            });
-        }*/
+        ((MainViewHolder) holder).mCard.setCardBackgroundColor(Color.BLACK);
     }
 
     public void setData(ArrayList<MindItemBean> data) {
@@ -69,6 +57,7 @@ public class MindRvAdpter extends RecyclerView.Adapter {
             super(itemView);
             mTvName = (TextView) itemView.findViewById(R.id.item_tv_main_mind_name);
             mCard = (CardView) itemView.findViewById(R.id.item_card_view);
+            //mCard.setCardBackgroundColor();
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
