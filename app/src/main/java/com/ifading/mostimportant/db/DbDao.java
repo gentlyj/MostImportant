@@ -97,4 +97,32 @@ public class DbDao {
         database.close();
         return content;
     }
+
+    public void updateItemDescribe(int id, String describtion) {
+        SQLiteDatabase database = mHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DataBase.MAINPAGE.ITEM_DESCRIBE, describtion);
+
+        int update = database.update(DataBase.MAINPAGE.TABLE_NAME, contentValues, DataBase.MAINPAGE.ITEM_ID + " =? ", new String[]{String.valueOf(id)});
+
+        Log.d("ListFragment","更新结果是:"+update);
+
+        database.close();
+    }
+
+    public String getItemDescribe(int id) {
+        SQLiteDatabase database = mHelper.getWritableDatabase();
+
+        String sql = "select * from " + DataBase.MAINPAGE.TABLE_NAME + " where " + DataBase.MAINPAGE.ITEM_ID + " =? ";
+        Cursor cursor = database.rawQuery(sql, new String[]{String.valueOf(id)});
+        String describe = null;
+        if (cursor != null ) {
+            if (cursor.moveToNext()) {
+                describe = cursor.getString(cursor.getColumnIndex(DataBase.MAINPAGE.ITEM_DESCRIBE));
+            }
+            cursor.close();
+        }
+        database.close();
+        return describe;
+    }
 }

@@ -39,9 +39,9 @@
                     android:layout_marginTop="55dp"
                     android:duplicateParentState="true"
                     android:padding="10dp"
-                    android:text="@string/test"
                     android:textSize="18sp" /><!--android:layout_gravity="bottom"
                     android:duplicateParentState="true"
+                    android:text="@string/test"
                     android:layout_marginBottom="45dp"-->
             </LinearLayout>
 
@@ -58,7 +58,6 @@
 
 
             <View
-                android:background="#ff00ff"
                 android:layout_marginTop="75dp"
                 android:id="@+id/detail_test_gesture_capture"
                 android:layout_width="match_parent"

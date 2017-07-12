@@ -2,14 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include
+        android:id="@+id/main_toolbar"
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="top" />
 
     <Button
+        android:text="@string/save"
         android:layout_alignParentBottom="true"
         android:id="@+id/describe_btn"
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 
     <EditText
+        android:padding="5dp"
+        android:background="@null"
+        android:focusableInTouchMode="true"
         android:layout_above="@+id/describe_btn"
         android:id="@+id/describe_et"
         android:layout_width="match_parent"

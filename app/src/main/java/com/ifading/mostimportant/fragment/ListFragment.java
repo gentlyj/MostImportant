@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ifading.mostimportant.R;
@@ -40,6 +41,7 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
     private boolean mSeekBarSettled;
     //seekbar百分比
     private int mSbProgress;
+
 
 
     public static ListFragment newInstance(int index) {
@@ -87,7 +89,6 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
         mListRv = (RecyclerView) view.findViewById(R.id.rv_detali_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false);
         mListRv.setLayoutManager(linearLayoutManager);
-
     }
 
     private void initData() {
@@ -121,6 +122,7 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
         final EditText et = (EditText) dilogView.findViewById(R.id.dialog_new_item_ed_name);
         SeekBar sb = (SeekBar) dilogView.findViewById(R.id.dialog_new_item_sb_precent);
         Button btnOk = (Button) dilogView.findViewById(R.id.dialog_new_item_btn_ok);
+        final TextView mTvImporantPercent = (TextView) dilogView.findViewById(R.id.dialog_new_item_tv_precent);
         Button btnCancel = (Button) dilogView.findViewById(R.id.dialog_new_item_btn_cancel);
         final AlertDialog dialog = builder.show();
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -128,6 +130,8 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mSeekBarSettled = true;
                 mSbProgress = progress;
+                Log.d(TAG,"状态改变时,mTvImporantPercent为空:"+(mTvImporantPercent == null));
+                mTvImporantPercent.setText("重要程度: " + mSbProgress + "%");
             }
 
             @Override
@@ -145,7 +149,7 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
             @Override
             public void onClick(View v) {
                 String input = et.getText().toString();
-                if (!mSeekBarSettled){
+                if (!mSeekBarSettled) {
                     Toast.makeText(getActivity().getApplicationContext(), "百分比未设置" + input, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -163,7 +167,7 @@ public class ListFragment extends Fragment implements DetailListRvAdpter.ItemOnC
                     swapData();
 
                     //ArrayList<ListDetailItemBean> desList = (ArrayList<ListDetailItemBean>) mData.clone();
-                    ListDetailItemBean lastItem = mData.remove(mData.size()-1);
+                    ListDetailItemBean lastItem = mData.remove(mData.size() - 1);
                     //desList.remove(desList.size() - 1);
                     String content = JsonUtils.listToJson(mData);
                     mData.add(lastItem);

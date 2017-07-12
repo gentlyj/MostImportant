@@ -41,4 +41,12 @@ public class DbUtils {
     public static String getItemContent(int position) {
         return mDao.getItemContent(position);
     }
+
+    public static void updateItemDescribe(int mCurrentItemDbPosition, String describtion) {
+        mDao.updateItemDescribe(mCurrentItemDbPosition,describtion);
+    }
+
+    public static String getItemDescribe(int mCurrentItemDbPosition) {
+        return mDao.getItemDescribe(mCurrentItemDbPosition);
+    }
 }

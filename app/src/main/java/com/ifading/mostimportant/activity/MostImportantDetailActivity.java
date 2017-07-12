@@ -1,11 +1,11 @@
 package com.ifading.mostimportant.activity;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -17,22 +17,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ifading.mostimportant.R;
 import com.ifading.mostimportant.adpter.DetailViewPager;
+import com.ifading.mostimportant.callback.AppBarStateChangeListener;
+import com.ifading.mostimportant.db.DbUtils;
 import com.ifading.mostimportant.fragment.ChartFragment;
 import com.ifading.mostimportant.fragment.ListFragment;
-import com.ifading.mostimportant.view.ContentTextview;
-import com.ifading.mostimportant.view.InterruptTouchLinearLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnLongClick;
 
 public class MostImportantDetailActivity extends AppCompatActivity {
 
@@ -56,11 +53,10 @@ public class MostImportantDetailActivity extends AppCompatActivity {
     protected TextView mTvDescrivbe;
     //@BindView(R.id.detail_btn_test)
     protected Button nBtnTest;
-    @BindView(R.id.detail_ll_content_container)
-    protected LinearLayout mLL;
     @BindView(R.id.detail_test_gesture_capture)
-    protected View mView;
-
+    protected View mGetEditInfoTouchEventView;
+    @BindView(R.id.app_bar)
+    protected AppBarLayout mAppBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +64,32 @@ public class MostImportantDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mCurrentItemDbPosition = getIntent().getIntExtra(ITEM_NUMBER, 0);
         mCurrentItemName = getIntent().getStringExtra(ITEN_NAME);
+        String describe = DbUtils.getItemDescribe(mCurrentItemDbPosition);
         initView();
-        initData(getIntent().getStringExtra(ITEN_NAME));
-
+        initData(getIntent().getStringExtra(ITEN_NAME),describe);
+        initEvent();
     }
 
-    private void initData(String name) {
+    private void initEvent() {
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                //因为占位view在折叠时会遮挡住toolbar,导致不能返回,所以在折叠时,隐藏占位view,也就是说只有展开时,才能点击修改
+                if( state == State.EXPANDED ) {
+                    //展开状态
+                    mGetEditInfoTouchEventView.setVisibility(View.VISIBLE);
+                }else if(state == State.COLLAPSED){
+                    //折叠状态
+                    mGetEditInfoTouchEventView.setVisibility(View.GONE);
+                }else {
+                    //中间状态
+                    mGetEditInfoTouchEventView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void initData(String name, String describe) {
         Log.d("ListFragment", "获取的name:" + name);
         getSupportActionBar().setTitle(name);
         //mToolbar.setTitle(name);
@@ -85,7 +101,7 @@ public class MostImportantDetailActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(mListFragment, "列表");//添加Fragment
         viewPagerAdapter.addFragment(ChartFragment.newInstance(1), "图表");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
-
+        mTvDescrivbe.setText(describe);
     }
 
     private void initView() {
@@ -102,37 +118,22 @@ public class MostImportantDetailActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.fab, R.id.detail_ll_content_container,R.id.detail_tv_describe,R.id.detail_test_gesture_capture})//,R.id.detail_ll_content_container，R.id.detail_btn_test,R.id.detail_tv_describe,
+    @OnClick({R.id.fab, R.id.detail_ll_content_container,R.id.detail_test_gesture_capture})//,R.id.detail_ll_content_container，R.id.detail_btn_test,R.id.detail_tv_describe,
     public void onClick(View v) {
         if (v == mFab) {
             mListFragment.setAddState(!mListInAddState);
             enterEditState(!mListInAddState);
             mListInAddState = !mListInAddState;
         } else if (v == mTvDescrivbe) {
-            Log.d(TAG,"mTvDescrivbe-1NCLICK!");
+            //Log.d(TAG,"mTvDescrivbe-1NCLICK!");
+        }else if (v == mGetEditInfoTouchEventView){
+            Log.d(TAG,"mGetEditInfoTouchEventView-1NCLICK!");
             if (mListInAddState) {
                 startDescribeActivity(mTvDescrivbe.getText().toString());
             } else {
                 // TODO: 2017/7/8 0008 可以弹个popwindow?
             }
         }
-        /*else if (v == nBtnTest){
-            Log.d(TAG,"nBtnTest-1NCLICK!");
-
-        }*/
-        else if (v == mLL){
-            Log.d(TAG,"mLL-1NCLICK!");
-        }else if (v == mView){
-            Log.d(TAG,"mView-1NCLICK!");
-        }
-    }
-
-    @OnLongClick({R.id.detail_tv_describe})
-    protected boolean onLongClick(View v){
-        if (v == mTvDescrivbe){
-            Log.d(TAG,"mTvDescrivbe-2ONCLICK!");
-        }
-        return true;
     }
 
     private void startDescribeActivity(String content) {
@@ -147,6 +148,11 @@ public class MostImportantDetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case DescribeActivity.REQUEST_ID:
+                if (resultCode == Activity.RESULT_OK){
+                    String describetion = data.getStringExtra(DescribeActivity.EDITED_INFO);
+                    mTvDescrivbe.setText(describetion);
+                    DbUtils.updateItemDescribe(mCurrentItemDbPosition,describetion);
+                }
                 break;
 
             default:
@@ -165,13 +171,13 @@ public class MostImportantDetailActivity extends AppCompatActivity {
             //mFab.setBackgroundColor(getResources().getColor(R.color.add_item_fab_bg));
             mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.add_item_fab_bg)));
             //mFab.setColorFilter(getResources().getColor(R.color.add_item_fab_bg));
-            mTvDescrivbe.setBackgroundColor(Color.parseColor("#aaffffff"));
-            mTvDescrivbe.setClickable(false);
+            //mTvDescrivbe.setBackgroundColor(Color.parseColor("#aaffffff"));
+            //mTvDescrivbe.setClickable(false);
         } else {
             mFab.setImageResource(R.drawable.ic_create_white);
             mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-            mTvDescrivbe.setBackgroundColor(Color.TRANSPARENT);
-            mTvDescrivbe.setClickable(false);
+            //mTvDescrivbe.setBackgroundColor(Color.TRANSPARENT);
+            //mTvDescrivbe.setClickable(false);
         }
     }
 
